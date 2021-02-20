@@ -1,0 +1,66 @@
+---
+title: "Programming Assignment 3"
+author: "Ziling Zhu"
+date: "Last update: `r Sys.Date()`"
+output:
+  html_document:
+    theme: yeti
+---
+
+# Load the dataset
+```{r, echo = TRUE}
+#set up tidyverse
+library(tidyverse)
+#load the dataset languageR
+library(languageR)
+```
+
+## Tidy the dataset
+```{r, echo = TRUE}
+#show that the dataset is tidy
+str(english)
+#give the first six examples of the tidy dataset
+head(english)
+```
+
+## Calculate descriptive statistics
+```{r, echo = TRUE}
+#descriptive statistics of each variable
+summary(english)
+```
+
+## Build a bivariate regression model
+```{r, echo = TRUE}
+#build a bivariate regression model
+model <- lm(Familiarity ~ WrittenFrequency, data = english)
+#show the model details
+summary(model)
+```
+
+## Plot
+```{r, echo = TRUE}
+#import the dataset english
+english %>% 
+#pipe it into ggplot2
+ggplot(aes(x = WrittenFrequency, y = Familiarity)) + 
+#draw a scatterplot
+  geom_point(alpha = 0.05) +
+#draw the regression line
+  geom_smooth(method = "lm", color = "navy", size = 1, se = FALSE) +
+#put a label for the regression line
+  annotate(geom = "text", x = 10, y = 5.5,
+           label = "y = 0.49x + 1.32",
+           family = "Palatino") +
+#put labels for the x-axis, y-axis, and title
+  labs(x = "WrittenFrequency", y = "Familiarity",
+       title = "Positive Correlation of Written Frequency and Familiarity") +
+#set a beautiful theme
+  theme_minimal() +
+#set a beautiful font
+  theme_test(base_family = "Palatino")
+```
+
+## General observations
+The two continuous variables that I have selected are **WrittenFrequency** and **Familiarity**. The p-value is lower than 0.05, so the positive correlation of the two variables is statistically significant. That means **Familiarity** is positively correlated with **WrittenFrequency**.
+
+In the dataset, we can preliminarily conclude that the more frequently an English word is written, the more familiar English users rate it to be.
